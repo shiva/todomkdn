@@ -1,0 +1,29 @@
+OMI - Things to get done
+========================
+
+
+Today
+=====
+send mail to Johan Segolsson for validate SPI
+
+Codereview
+----------
+{done} models
+{done} UT changes 
+
+Bugs
+----
+{review}	UT
+{review}	Test model
+			Implement interfaces for validate spi
+{filed} 	Change session API for type coersion
+Change interface for get_com_value/get_omi_value to accept decl_t instead of attr_id
+
+
+
+
+Note: Markdown + extra syntax
+ - {} - indicates status value, free form text (done will strike through)
+
+
+
