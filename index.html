@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<title>TodoMarkdown</title>
+		
+		<link rel="stylesheet" href="index.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		
+		<script src="jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="autoresize.jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="showdown.js"></script>
+		<script> 
+		/* globals */
+		var mkdnConverter;
+		var textAreaLC;
+		
+		function initApp() {
+			initComponents();
+			initHandlers();
+			interpretData();
+		}
+		
+		function initComponents() {
+			mkdnConverter = new Showdown.converter();
+		}
+		
+		function initHandlers() {
+			
+			$("textarea#content").autoResize({
+			    // On resize:
+			    onResize : function() {
+			        $(this).css({opacity:0.8});
+			    },
+			    // After resize:
+			    animateCallback : function() {
+			        $(this).css({opacity:1});
+			    },
+			    // Quite slow animation:
+			    animateDuration : 300,
+			    // More extra space:
+			    extraSpace : 40
+			});
+			
+			$("#read-container").click(function() {
+				setEditMode(true);
+			});
+			
+			$("a#saveContent").click(interpretData);
+		}
+		
+		function interpretData() {
+			var data = $("textarea#content").val();
+			$("#read-container").html(convertToHtml(data));
+			setEditMode(false);
+		}
+		
+		function convertToHtml(data) {
+			return mkdnConverter.makeHtml(data);
+		}
+		
+		function resizeTextArea() {
+			/* $("#debug").html("resizing: " + 
+							$("textarea#content").height() + " : " + 
+							$("#read-container").height());
+							*/
+			$("textarea#content").height($("#read-container").height() + 1);
+		}
+		
+		/**
+		 * @param {boolean} state true, will put gui in edit mode,
+		 *                        false will put in read mode
+		 */ 
+		function setEditMode(state) {
+			if (state === true) {
+				resizeTextArea();
+				$("#edit-container").show();
+				$("#read-container").hide();
+			} else {
+				$("#edit-container").hide();
+				$("#read-container").show();
+			}
+		}
+			
+		$(initApp);
+		</script>
+	</head>
+	<body>
+		<div id="read-container">This text will be changed to something else</div>	
+		
+		<div id="edit-container">
+			<a id="saveContent">Save</a>
+			<br />
+			<textarea id="content">
+OMI - Things to get done
+========================
+
+Today			
+-----
+send mail to Johan Segolsson for validate SPI
+
+Codereview
+----------
+* {done} models
+* {done} UT changes 
+
+Bugs
+----
+1. {review}	UT
+2. {review}	Test model
+3. Implement interfaces for validate spi
+4. {filed} 	Change session API for type coersion
+5. Change interface for get\_com\_value/get\_omi\_value to accept decl\_t instead of attr\_id
+
+***Note: Markdown + extra syntax
+- {} - indicates status value, free form text (done will strike through)
+
+			</textarea>
+		</div>
+		<div id="debug"></div>
+	</body>
+</html>
